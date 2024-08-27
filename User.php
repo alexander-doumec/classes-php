@@ -13,14 +13,20 @@ class User
 
     public function __construct($host, $username, $password, $database)
     {
-        $this->connection = new mysqli($host, $username, $password, $database);
+        $this->connectDatabase($host, $username, $password, $database);
 
-        //Verify connection
-        if ($this->connection->connect_error) {
-            die("Connection failed : " . $this->connection->connect_error);
-        }
+        
     }
 
+    private function connectDatabase($host, $username, $password, $database){
+        $this->connection = new mysqli($host, $username, $password, $database);
+
+        if ($this->connection->connect_error) {
+            die("Connection failed : " . $this->connection->connect_error);
+    }
+
+}
+    
     //Method to register a new user
     public function register($login, $password, $email, $firstname, $lastname) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -49,6 +55,7 @@ class User
             $this->lastname = $user['lastname'];
             $this->isConnected = true;
         }
+    
 
         $stmt->close();
 
@@ -141,5 +148,7 @@ class User
     }
 
 }
+
+
 
 ?>
